@@ -1,5 +1,22 @@
+require(foreign)
+require(ggplot2)
+require(MASS)
+require(Hmisc)
+require(reshape2)
+
+
+setwd("C:/Users/KUA9TE/Desktop")
 dat <- read.dta("https://stats.idre.ucla.edu/stat/data/ologit.dta")
 head(dat)
+
+# t value is simply the ratio of the coefficient to its standard error.
+
+
+
+# EXAMPLE 2 ---------------------------------------------------------------
+
+# ref 
+# https://data.library.virginia.edu/fitting-and-interpreting-a-proportional-odds-model/
 
 party <- factor(rep(c("Rep","Dem"), c(407, 428)), 
                 levels=c("Rep","Dem"))  
@@ -11,7 +28,7 @@ pol.ideology <- factor(c(rep(ideology, rpi),
 dat <- data.frame(party,pol.ideology)
 
 library(MASS)
-pom <- polr(pol.ideology ~ party, data = dat)
+pom <- polr(pol.ideology ~ party, data = dat, Hess = TRUE)
 summary(pom)
 
 # The type="p" argument says we want probabilities.
