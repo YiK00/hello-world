@@ -103,6 +103,7 @@ df_nick$Phenotype <- factor(df_nick$Phenotype,
                         ordered = T,
                         levels = c("Normal", "Nick1", "Nick2", "Nick3"))
 
+library(MASS)
 pom_nick <- polr(Phenotype ~ Genotype, 
              weights = Count, 
              df_nick, 
@@ -207,3 +208,34 @@ N_odds
 # odds ratio
 OR <- N_odds/Cdk8_odds
 OR
+
+
+
+
+# Chi square test ---------------------------------------------------------
+
+
+df3 <- read.csv("Book3.csv")
+
+
+# perform chi-square test for wing nicking data
+
+chisq.test(df3$Cdk8, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$cycC, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$kto241, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$kto631, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$skd13, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$skd413, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$ago1, p = df3$N, rescale.p = TRUE)
+chisq.test(df3$ago3, p = df3$N, rescale.p = TRUE)
+
+
+df4 <- read.csv("Book4.csv")
+chisq.test(df4$Cdk8, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$cycC, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$kto241, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$kto631, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$skd13, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$skd413, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$ago1, p = df4$N, rescale.p = TRUE)
+chisq.test(df4$ago3, p = df4$N, rescale.p = TRUE)
