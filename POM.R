@@ -19,6 +19,19 @@ pom_bristle <- polr(Phenotype ~ Genotype,
              Hess = TRUE)
 summary(pom_bristle)
 
+# Wald–statistic test
+se <- summary(pom_bristle)[1][[1]][1:8,2] # get standard error
+wald <- -coef(pom_bristle)/se 
+1-pchisq(wald^2, df=1) # not sure if df=1
+
+
+# fit multinomial logistic model
+mlm <- multinom(Phenotype ~ Genotype, data = df_bristle)
+M1 <- logLik(pom_bristle)
+M2 <- logLik(mlm)
+G <- -2*(M1[1] - M2[1])
+pchisq(G, 3,  lower.tail = FALSE) # not sure if df=3
+
 # odds ratio
 or_brislte <- exp(-coef(pom_bristle))
 or_brislte
@@ -33,18 +46,8 @@ ctable_bristle
 
 # p value adjustment
 library(FSA)
-Geno_bristle <- c("ago1", 
-                  "ago3", 
-                  "cdk8", 
-                  "cycC", 
-                  "kto241", 
-                  "kto631", 
-                  "skd13", 
-                  "skd413", 
-                  "b1", 
-                  "b2", 
-                  "b3")
-p_value_bristle <- data.frame(Geno_bristle, p_value_bristle)
+geno <- row.names(ctable_bristle)
+p_value_bristle <- data.frame(geno, p_value_bristle)
 headtail(p_value_bristle)
 
 # perform p value adjustment and add to dataframe
