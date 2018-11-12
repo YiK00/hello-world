@@ -121,6 +121,7 @@ ctable_nick <- cbind(ctable_nick,
 ctable_nick
 
 
+
 # p value adjustment
 library(FSA)
 geno <- row.names(ctable_nick)
@@ -129,15 +130,15 @@ headtail(p_value_nick)
 
 # perform p value adjustment and add to dataframe
 p_value_nick$Bonferroni <- p.adjust(p_value_nick$p_value_nick, 
-                                method = "bonferroni")
+                                    method = "bonferroni")
 p_value_nick$BH <- p.adjust(p_value_nick$p_value_nick, 
-                        method = "BH")
+                            method = "BH")
 p_value_nick$Holm <- p.adjust(p_value_nick$p_value_nick, 
-                          method = "holm")
+                              method = "holm")
 p_value_nick$Hommel <- p.adjust(p_value_nick$p_value_nick, 
-                            method = "hommel")
+                                method = "hommel")
 p_value_nick$BY <- p.adjust(p_value_nick$p_value_nick, 
-                        method = "BY")
+                            method = "BY")
 p_value_nick
 
 
@@ -169,6 +170,28 @@ abline(0, 1,
        col=1,
        lty=2,
        lwd=1)
+
+# compare N vs Nxcdk8hets only
+df_cdk8nick <- df_nick[1:8,]
+is.factor(df_cdk8nick$Phenotype)
+df_cdk8nick$Phenotype <- factor(df_cdk8nick$Phenotype, 
+                            ordered = T,
+                            levels = c("Normal", "Nick1", "Nick2", "Nick3"))
+
+library(MASS)
+pom_cdk8nick <- polr(Phenotype ~ Genotype, 
+                 weights = Count, 
+                 df_cdk8nick, 
+                 Hess = TRUE)
+summary(pom_cdk8nick)
+
+ctable_cdk8 <- coef(summary(pom_cdk8nick))
+p_value_cdk8 <- pnorm(abs(ctable_cdk8[, "t value"]), 
+                      lower.tail = FALSE) *2
+ctable_cdk8 <- cbind(ctable_cdk8, 
+                     "p value" = p_value_cdk8)
+ctable_cdk8
+
 
 # 1 variable test (N vs NxCdk8) ---------------------------------------------------------
 
